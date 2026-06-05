@@ -32,36 +32,32 @@
             android:layout_height="wrap_content"
             android:text="@string/app_tagline"
             android:textSize="14sp"
-            android:textColor="@color/teal"
-            android:layout_marginTop="4dp"/>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/card_bg"
-            android:layout_marginTop="24dp"
-            android:layout_marginBottom="24dp"/>
+            android:textColor="#B3FFFFFF"
+            android:layout_marginBottom="40dp"/>
 
         <Button
             android:id="@+id/btnNewTicket"
             android:layout_width="match_parent"
             android:layout_height="64dp"
             android:text="פתח קריאת שירות חדשה"
-            android:background="@drawable/btn_primary"
             android:textColor="#0D1B2A"
             android:textSize="18sp"
             android:textStyle="bold"
+            android:fontFamily="sans-serif-medium"
+            android:backgroundTint="@color/teal"
             android:layout_marginBottom="16dp"/>
 
         <Button
             android:id="@+id/btnCall1"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
+            android:layout_height="64dp"
             android:text="צור קשר טלפוני"
-            android:background="@color/card_bg"
-            android:textColor="@color/teal"
-            android:textSize="16sp"
-            android:layout_marginBottom="8dp"/>
+            android:textColor="#0D1B2A"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:fontFamily="sans-serif-medium"
+            android:backgroundTint="@color/teal"
+            android:layout_marginBottom="16dp"/>
 
     </LinearLayout>
 </ScrollView>
