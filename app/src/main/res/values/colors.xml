@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="emt_dark">#0D1B2A</color>
+    <color name="emt_dark_card">#1A2D40</color>
+    <color name="emt_teal">#00C9A7</color>
+    <color name="emt_white">#FFFFFF</color>
+    <color name="emt_white_70">#B3FFFFFF</color>
+    <color name="emt_white_40">#66FFFFFF</color>
+    <color name="status_bar">#0A1520</color>
+</resources>
