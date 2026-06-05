@@ -25,8 +25,7 @@
             android:text="EMT-IT"
             android:textSize="36sp"
             android:textColor="#FFFFFF"
-            android:textStyle="bold"
-            android:layout_marginTop="32dp"/>
+            android:textStyle="bold"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -52,23 +51,25 @@
             android:textColor="#0D1B2A"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:layout_marginBottom="16dp"/>
+            android:layout_marginBottom="24dp"/>
 
-        <TextView
-            android:layout_width="wrap_content"
+        <Button
+            android:id="@+id/btnCall1"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="טלפון: 03-5235989"
-            android:textSize="14sp"
-            android:textColor="#AAAAAA"
-            android:layout_marginTop="32dp"/>
+            android:text="התקשר: 03-5235989"
+            android:background="@color/card_bg"
+            android:textColor="@color/teal"
+            android:layout_marginBottom="8dp"/>
 
-        <TextView
-            android:layout_width="wrap_content"
+        <Button
+            android:id="@+id/btnCall2"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="נייד: 050-9166011"
-            android:textSize="14sp"
-            android:textColor="#AAAAAA"
-            android:layout_marginTop="4dp"/>
+            android:background="@color/card_bg"
+            android:textColor="@color/teal"
+            android:layout_marginBottom="8dp"/>
 
     </LinearLayout>
 </ScrollView>
