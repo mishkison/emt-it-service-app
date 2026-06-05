@@ -47,7 +47,7 @@
             android:layoutDirection="rtl"/>
 
         <EditText
-            android:id="@+id/etSubject"
+            android:id="@+id/etTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="* נושא הקריאה"
@@ -59,7 +59,7 @@
             android:layoutDirection="rtl"/>
 
         <EditText
-            android:id="@+id/etDescription"
+            android:id="@+id/etDesc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="* תיאור התקלה"
@@ -85,7 +85,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/teal"
-            android:textColor="#FFFFFF"
             android:layout_marginBottom="12dp"/>
 
         <TextView
@@ -98,11 +97,10 @@
             android:layoutDirection="rtl"/>
 
         <Spinner
-            android:id="@+id/spServiceType"
+            android:id="@+id/spCategory"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/teal"
-            android:textColor="#FFFFFF"
             android:layout_marginBottom="16dp"/>
 
         <TextView
@@ -149,12 +147,20 @@
         </LinearLayout>
 
         <ImageView
-            android:id="@+id/ivPreview"
+            android:id="@+id/ivScreenshot"
             android:layout_width="match_parent"
             android:layout_height="160dp"
             android:scaleType="centerCrop"
             android:visibility="gone"
-            android:layout_marginBottom="16dp"/>
+            android:layout_marginBottom="8dp"/>
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:visibility="gone"
+            android:layout_marginBottom="8dp"/>
 
         <Button
             android:id="@+id/btnSubmit"
