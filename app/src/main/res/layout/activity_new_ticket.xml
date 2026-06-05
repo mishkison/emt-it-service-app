@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_dark">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <EditText
+            android:id="@+id/etName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="שם מלא *"
+            android:textColorHint="#888"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="@color/teal"
+            android:layout_marginBottom="12dp"
+            android:inputType="textPersonName"
+            android:layoutDirection="rtl"/>
+
+        <EditText
+            android:id="@+id/etPhone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="טלפון"
+            android:textColorHint="#888"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="@color/teal"
+            android:layout_marginBottom="12dp"
+            android:inputType="phone"
+            android:layoutDirection="rtl"/>
+
+        <EditText
+            android:id="@+id/etCompany"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="שם חברה"
+            android:textColorHint="#888"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="@color/teal"
+            android:layout_marginBottom="12dp"
+            android:layoutDirection="rtl"/>
+
+        <EditText
+            android:id="@+id/etTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="נושא הקריאה *"
+            android:textColorHint="#888"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="@color/teal"
+            android:layout_marginBottom="12dp"
+            android:layoutDirection="rtl"/>
+
+        <EditText
+            android:id="@+id/etDesc"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:hint="תיאור התקלה *"
+            android:textColorHint="#888"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="@color/teal"
+            android:layout_marginBottom="12dp"
+            android:gravity="top|right"
+            android:inputType="textMultiLine"
+            android:layoutDirection="rtl"/>
+
+        <Spinner
+            android:id="@+id/spCategory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:backgroundTint="@color/teal"/>
+
+        <Spinner
+            android:id="@+id/spPriority"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="@color/teal"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="12dp">
+
+            <Button
+                android:id="@+id/btnCamera"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="צלם תקלה"
+                android:background="@color/card_bg"
+                android:textColor="@color/teal"
+                android:layout_marginEnd="8dp"/>
+
+            <Button
+                android:id="@+id/btnGallery"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="בחר מגלריה"
+                android:background="@color/card_bg"
+                android:textColor="@color/teal"/>
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/ivScreenshot"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:visibility="gone"
+            android:scaleType="centerCrop"
+            android:layout_marginBottom="16dp"/>
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            android:indeterminateTint="@color/teal"
+            android:layout_marginBottom="8dp"/>
+
+        <Button
+            android:id="@+id/btnSubmit"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="שלח קריאת שירות"
+            android:background="@drawable/btn_primary"
+            android:textColor="#0D1B2A"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="24dp"/>
+
+    </LinearLayout>
+</ScrollView>
