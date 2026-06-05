@@ -11,6 +11,14 @@
         android:padding="24dp"
         android:gravity="center_horizontal">
 
+        <ImageView
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:src="@drawable/ic_logo"
+            android:scaleType="fitCenter"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="16dp"/>
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -26,45 +34,41 @@
             android:text="@string/app_tagline"
             android:textSize="14sp"
             android:textColor="@color/teal"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="32dp"/>
+            android:layout_marginTop="4dp"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/card_bg"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="24dp"/>
 
         <Button
             android:id="@+id/btnNewTicket"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
+            android:layout_height="64dp"
             android:text="פתח קריאת שירות חדשה"
             android:background="@drawable/btn_primary"
             android:textColor="#0D1B2A"
-            android:textSize="16sp"
-            android:textStyle="bold"/>
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="16dp"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="צור קשר ישיר"
-            android:textSize="18sp"
-            android:textColor="#FFFFFF"
-            android:textStyle="bold"
-            android:layout_marginTop="32dp"
-            android:layout_marginBottom="16dp"/>
+            android:text="טלפון: 03-5235989"
+            android:textSize="14sp"
+            android:textColor="#AAAAAA"
+            android:layout_marginTop="32dp"/>
 
-        <Button
-            android:id="@+id/btnCall1"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:text="03-5235989"
-            android:background="@color/card_bg"
-            android:textColor="@color/teal"
-            android:layout_marginBottom="8dp"/>
-
-        <Button
-            android:id="@+id/btnCall2"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:text="050-9166011"
-            android:background="@color/card_bg"
-            android:textColor="@color/teal"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="נייד: 050-9166011"
+            android:textSize="14sp"
+            android:textColor="#AAAAAA"
+            android:layout_marginTop="4dp"/>
 
     </LinearLayout>
 </ScrollView>
