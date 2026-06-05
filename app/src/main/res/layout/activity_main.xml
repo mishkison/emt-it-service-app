@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_dark">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:gravity="center_horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="EMT-IT"
+            android:textSize="36sp"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:layout_marginTop="32dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/app_tagline"
+            android:textSize="14sp"
+            android:textColor="@color/teal"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="32dp"/>
+
+        <Button
+            android:id="@+id/btnNewTicket"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="פתח קריאת שירות חדשה"
+            android:background="@drawable/btn_primary"
+            android:textColor="#0D1B2A"
+            android:textSize="16sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="צור קשר ישיר"
+            android:textSize="18sp"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="16dp"/>
+
+        <Button
+            android:id="@+id/btnCall1"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="03-5235989"
+            android:background="@color/card_bg"
+            android:textColor="@color/teal"
+            android:layout_marginBottom="8dp"/>
+
+        <Button
+            android:id="@+id/btnCall2"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="050-9166011"
+            android:background="@color/card_bg"
+            android:textColor="@color/teal"/>
+
+    </LinearLayout>
+</ScrollView>
