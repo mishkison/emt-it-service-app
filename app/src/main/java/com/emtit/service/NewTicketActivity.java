@@ -3,6 +3,8 @@ package com.emtit.service;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.ToneGenerator;
 import android.media.AudioManager;
 import android.net.Uri;
@@ -24,6 +26,7 @@ import androidx.core.content.FileProvider;
 import com.emtit.service.model.Ticket;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -38,23 +41,35 @@ public class NewTicketActivity extends AppCompatActivity {
 
     private Uri cameraImageUri;
     private File photoFile;
+    private Bitmap selectedBitmap;
 
     private final ActivityResultLauncher<Intent> cameraLauncher =
         registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
             if (result.getResultCode() == RESULT_OK && cameraImageUri != null) {
-                ivScreenshot.setImageURI(cameraImageUri);
-                ivScreenshot.setVisibility(View.VISIBLE);
+                try {
+                    InputStream is = getContentResolver().openInputStream(cameraImageUri);
+                    selectedBitmap = BitmapFactory.decodeStream(is);
+                    ivScreenshot.setImageBitmap(selectedBitmap);
+                    ivScreenshot.setVisibility(View.VISIBLE);
+                } catch (Exception e) {
+                    Toast.makeText(this, "שגיאה בטעינת תמונה", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
     private final ActivityResultLauncher<Intent> galleryLauncher =
         registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
             if (result.getResultCode() == RESULT_OK && result.getData() != null) {
-                Uri selectedImage = result.getData().getData();
-                if (selectedImage != null) {
-                    cameraImageUri = selectedImage;
-                    ivScreenshot.setImageURI(selectedImage);
-                    ivScreenshot.setVisibility(View.VISIBLE);
+                Uri selectedUri = result.getData().getData();
+                if (selectedUri != null) {
+                    try {
+                        InputStream is = getContentResolver().openInputStream(selectedUri);
+                        selectedBitmap = BitmapFactory.decodeStream(is);
+                        ivScreenshot.setImageBitmap(selectedBitmap);
+                        ivScreenshot.setVisibility(View.VISIBLE);
+                    } catch (Exception e) {
+                        Toast.makeText(this, "שגיאה בטעינת תמונה", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });
@@ -132,9 +147,8 @@ public class NewTicketActivity extends AppCompatActivity {
 
     private File createImageFile() throws IOException {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
-        String imageFileName = "IMG_" + timeStamp + "_";
         File storageDir = getExternalFilesDir(null);
-        return File.createTempFile(imageFileName, ".jpg", storageDir);
+        return File.createTempFile("IMG_" + timeStamp + "_", ".jpg", storageDir);
     }
 
     private void submitTicket() {
@@ -157,11 +171,9 @@ public class NewTicketActivity extends AppCompatActivity {
         ticket.setTitle(title);
         ticket.setDescription(desc);
         ticket.setCategory(spCategory.getSelectedItem().toString());
-        ticket.setPriority(spPriority.getSelectedItem().toString());
+        ticket.setPriority(spPriority.getSelectedItemPosition());
 
-        String imageUriStr = cameraImageUri != null ? cameraImageUri.toString() : null;
-
-        new EmailSender().sendEmail(ticket, imageUriStr, new EmailSender.Callback() {
+        EmailSender.send(ticket, selectedBitmap, new EmailSender.Callback() {
             @Override
             public void onSuccess() {
                 runOnUiThread(() -> {
@@ -188,9 +200,7 @@ public class NewTicketActivity extends AppCompatActivity {
             ToneGenerator toneGen = new ToneGenerator(AudioManager.STREAM_NOTIFICATION, 100);
             toneGen.startTone(ToneGenerator.TONE_PROP_BEEP2, 400);
             android.os.Handler handler = new android.os.Handler(getMainLooper());
-            handler.postDelayed(() -> {
-                toneGen.startTone(ToneGenerator.TONE_PROP_BEEP, 300);
-            }, 450);
+            handler.postDelayed(() -> toneGen.startTone(ToneGenerator.TONE_PROP_BEEP, 300), 450);
             handler.postDelayed(toneGen::release, 800);
         } catch (Exception e) {
             // ignore if sound fails
