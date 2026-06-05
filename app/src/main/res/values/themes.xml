@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.EMT" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/emt_teal</item>
+        <item name="colorPrimaryDark">@color/status_bar</item>
+        <item name="colorAccent">@color/emt_teal</item>
+        <item name="android:windowBackground">@color/emt_dark</item>
+        <item name="android:statusBarColor">@color/status_bar</item>
+        <item name="android:navigationBarColor">@color/emt_dark</item>
+    </style>
+    <style name="Theme.EMT.Splash" parent="Theme.EMT">
+        <item name="android:windowFullscreen">true</item>
+    </style>
+    <style name="EMT.TextInput" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeColor">@color/emt_teal</item>
+        <item name="hintTextColor">@color/emt_white_70</item>
+        <item name="android:textColorHint">@color/emt_white_40</item>
+        <item name="boxBackgroundColor">#1A2D40</item>
+    </style>
+</resources>
