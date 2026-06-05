@@ -1,4 +1,5 @@
 package com.emtit.service;
+
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -10,15 +11,18 @@ import javax.activation.DataSource;
 import javax.mail.*;
 import javax.mail.internet.*;
 import javax.mail.util.ByteArrayDataSource;
+
 public class EmailSender {
     private static final String FROM = "emishkis@gmail.com";
     private static final String PASS = "hyaujtqhklzrdxwp";
     private static final String TO = "eliran@mishkis.com";
-    public interface Callback { void onSuccess(); void onFailure(String e); }
+
+    public interface Callback { void onSuccess(); void onFailure(Exception e); }
+
     public static void send(Ticket t, Bitmap bmp, Callback cb) {
-        new AsyncTask<Void, Void, String>() {
+        new AsyncTask<Void, Void, Exception>() {
             @Override
-            protected String doInBackground(Void... v) {
+            protected Exception doInBackground(Void... v) {
                 try {
                     Properties p = new Properties();
                     p.put("mail.smtp.auth", "true");
@@ -32,39 +36,38 @@ public class EmailSender {
                         }
                     });
                     MimeMessage msg = new MimeMessage(ses);
-                    msg.setFrom(new InternetAddress(FROM, "EMT-IT Service"));
+                    msg.setFrom(new InternetAddress(FROM));
                     msg.addRecipient(Message.RecipientType.TO, new InternetAddress(TO));
-                    msg.setSubject("קריאת שירות חדשה #" + t.getId() + " | " + t.getTitle(), "UTF-8");
+                    msg.setSubject("קריאת שירות חדשה #" + t.getId() + " - " + t.getTitle(), "UTF-8");
                     MimeMultipart mp = new MimeMultipart();
-                    MimeBodyPart hp = new MimeBodyPart();
-                    hp.setContent(buildHtml(t), "text/html; charset=UTF-8");
-                    mp.addBodyPart(hp);
+                    MimeBodyPart htmlPart = new MimeBodyPart();
+                    htmlPart.setContent(buildHtml(t), "text/html; charset=UTF-8");
+                    mp.addBodyPart(htmlPart);
                     if (bmp != null) {
-                        MimeBodyPart ip = new MimeBodyPart();
-                        ByteArrayOutputStream bo = new ByteArrayOutputStream();
-                        bmp.compress(Bitmap.CompressFormat.JPEG, 85, bo);
-                        DataSource ds = new ByteArrayDataSource(bo.toByteArray(), "image/jpeg");
-                        ip.setDataHandler(new DataHandler(ds));
-                        ip.setFileName("screenshot_" + t.getId() + ".jpg");
-                        mp.addBodyPart(ip);
+                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                        bmp.compress(Bitmap.CompressFormat.JPEG, 80, baos);
+                        MimeBodyPart imgPart = new MimeBodyPart();
+                        DataSource ds = new ByteArrayDataSource(baos.toByteArray(), "image/jpeg");
+                        imgPart.setDataHandler(new DataHandler(ds));
+                        imgPart.setFileName("screenshot.jpg");
+                        mp.addBodyPart(imgPart);
                     }
                     msg.setContent(mp);
                     Transport.send(msg);
                     return null;
-                } catch (Exception e) {
-                    Log.e("EmailSender", "error", e);
-                    return e.getMessage();
-                }
+                } catch (Exception e) { return e; }
             }
             @Override
-            protected void onPostExecute(String e) {
+            protected void onPostExecute(Exception e) {
                 if (e == null) cb.onSuccess(); else cb.onFailure(e);
             }
         }.execute();
     }
+
     private static String h(String s) {
         return s == null ? "" : s.replace("&","&amp;").replace("<","&lt;").replace(">","&gt;");
     }
+
     private static String buildHtml(Ticket t) {
         return "<!DOCTYPE html><html dir='rtl'><head><meta charset='UTF-8'><style>"
             + "body{font-family:Arial;background:#f0f4f8;padding:20px;}"
@@ -80,16 +83,16 @@ public class EmailSender {
             + ".ftr a{color:#00C9A7;}</style></head><body><div class='card'>"
             + "<div class='hdr'><div class='logo'>EMT</div><h2>קריאת שירות חדשה</h2></div>"
             + "<div class='body'><table>"
-            + "<tr><td>קריאה</td><td>#" + h(t.getId()) + "</td></tr>"
-            + "<tr><td>כותרת</td><td>" + h(t.getTitle()) + "</td></tr>"
-            + "<tr><td>פונה</td><td>" + h(t.getReporterName()) + "</td></tr>"
+            + "<tr><td>מספר</td><td>#" + String.valueOf(t.getId()) + "</td></tr>"
+            + "<tr><td>נושא</td><td>" + h(t.getTitle()) + "</td></tr>"
+            + "<tr><td>שם</td><td>" + h(t.getReporterName()) + "</td></tr>"
             + "<tr><td>טלפון</td><td>" + h(t.getReporterPhone()) + "</td></tr>"
             + "<tr><td>חברה</td><td>" + h(t.getCompany()) + "</td></tr>"
-            + "<tr><td>קטגוריה</td><td>" + h(t.getCategoryLabel()) + "</td></tr>"
-            + "<tr><td>דחיפות</td><td style='color:" + t.getPriorityHex() + ";'>" + h(t.getPriorityLabel()) + "</td></tr>"
+            + "<tr><td>קטגוריה</td><td>" + h(t.getCategory()) + "</td></tr>"
+            + "<tr><td>עדיפות</td><td style='color:" + t.getPriorityHex() + ";'>" + h(t.getPriorityLabel()) + "</td></tr>"
             + "<tr><td>תאריך</td><td>" + h(t.getCreatedAt()) + "</td></tr>"
-            + "</table><div class='desc'><b>תיאור:</b><br><br>" + h(t.getDescription()) + "</div></div>"
+            + "</table><div class='desc'><b>תיאור:</b><br><br>" + h(t.getDescription()) + "</div>"
             + "<div class='ftr'>EMT-IT Solution | <a href='tel:0509166011'>050-9166011</a></div>"
-            + "</div></body></html>";
+            + "</div></div></body></html>";
     }
 }
