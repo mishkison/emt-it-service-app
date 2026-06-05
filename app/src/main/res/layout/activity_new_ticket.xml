@@ -87,6 +87,15 @@
             android:textColor="#FFFFFF"
             android:popupBackground="@color/card_bg"/>
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="צרף צילום מסך (אופציונלי):"
+            android:textColor="#CCCCCC"
+            android:textSize="14sp"
+            android:gravity="right"
+            android:layout_marginBottom="8dp"/>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -96,21 +105,23 @@
             <Button
                 android:id="@+id/btnCamera"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
                 android:layout_weight="1"
-                android:text="צלם תמונה"
+                android:text="📷 צלם תמונה"
                 android:background="@color/card_bg"
                 android:textColor="@color/teal"
+                android:textSize="14sp"
                 android:layout_marginEnd="8dp"/>
 
             <Button
                 android:id="@+id/btnGallery"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
                 android:layout_weight="1"
-                android:text="בחר תמונה"
+                android:text="🖼 בחר מגלריה"
                 android:background="@color/card_bg"
-                android:textColor="@color/teal"/>
+                android:textColor="@color/teal"
+                android:textSize="14sp"/>
 
         </LinearLayout>
 
