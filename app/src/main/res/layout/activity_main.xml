@@ -51,24 +51,16 @@
             android:textColor="#0D1B2A"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:layout_marginBottom="24dp"/>
+            android:layout_marginBottom="16dp"/>
 
         <Button
             android:id="@+id/btnCall1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="התקשר: 03-5235989"
+            android:layout_height="56dp"
+            android:text="צור קשר טלפוני"
             android:background="@color/card_bg"
             android:textColor="@color/teal"
-            android:layout_marginBottom="8dp"/>
-
-        <Button
-            android:id="@+id/btnCall2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="נייד: 050-9166011"
-            android:background="@color/card_bg"
-            android:textColor="@color/teal"
+            android:textSize="16sp"
             android:layout_marginBottom="8dp"/>
 
     </LinearLayout>
