@@ -4,6 +4,8 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.media.ToneGenerator;
+import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -28,34 +30,42 @@ import java.util.Date;
 import java.util.Locale;
 
 public class NewTicketActivity extends AppCompatActivity {
+
     private EditText etName, etPhone, etCompany, etTitle, etDesc;
     private Spinner spCategory, spPriority;
     private ImageView ivScreenshot;
-    private Button btnCamera, btnGallery, btnSubmit;
     private ProgressBar progressBar;
-    private Bitmap selectedBitmap;
-    private Uri photoUri;
+    private Button btnSubmit, btnCamera, btnGallery;
+
+    private Uri cameraImageUri;
+    private File photoFile;
 
     private final ActivityResultLauncher<Intent> cameraLauncher =
         registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
-            if (result.getResultCode() == RESULT_OK) {
-                try {
-                    selectedBitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), photoUri);
-                    ivScreenshot.setImageBitmap(selectedBitmap);
-                    ivScreenshot.setVisibility(View.VISIBLE);
-                } catch (Exception e) { e.printStackTrace(); }
+            if (result.getResultCode() == RESULT_OK && cameraImageUri != null) {
+                ivScreenshot.setImageURI(cameraImageUri);
+                ivScreenshot.setVisibility(View.VISIBLE);
             }
         });
 
     private final ActivityResultLauncher<Intent> galleryLauncher =
         registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
             if (result.getResultCode() == RESULT_OK && result.getData() != null) {
-                try {
-                    Uri uri = result.getData().getData();
-                    selectedBitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
-                    ivScreenshot.setImageBitmap(selectedBitmap);
+                Uri selectedImage = result.getData().getData();
+                if (selectedImage != null) {
+                    cameraImageUri = selectedImage;
+                    ivScreenshot.setImageURI(selectedImage);
                     ivScreenshot.setVisibility(View.VISIBLE);
-                } catch (Exception e) { e.printStackTrace(); }
+                }
+            }
+        });
+
+    private final ActivityResultLauncher<String> permissionLauncher =
+        registerForActivityResult(new ActivityResultContracts.RequestPermission(), granted -> {
+            if (granted) {
+                openCamera();
+            } else {
+                Toast.makeText(this, "נדרשת הרשאת מצלמה", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -72,105 +82,120 @@ public class NewTicketActivity extends AppCompatActivity {
         spCategory = findViewById(R.id.spCategory);
         spPriority = findViewById(R.id.spPriority);
         ivScreenshot = findViewById(R.id.ivScreenshot);
+        progressBar = findViewById(R.id.progressBar);
+        btnSubmit = findViewById(R.id.btnSubmit);
         btnCamera = findViewById(R.id.btnCamera);
         btnGallery = findViewById(R.id.btnGallery);
-        btnSubmit = findViewById(R.id.btnSubmit);
-        progressBar = findViewById(R.id.progressBar);
 
-        String[] categories = {"תמיכה טכנית", "תקלת חומרה", "תקלת תוכנה", "רשת ואינטרנט", "אחר"};
-        spCategory.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, categories));
+        String[] categories = {"קטגוריה", "תמיכה טכנית", "תקלת רשת", "תקלת חומרה", "תקלת תוכנה", "אחר"};
+        ArrayAdapter<String> catAdapter = new ArrayAdapter<>(this,
+            android.R.layout.simple_spinner_item, categories);
+        catAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spCategory.setAdapter(catAdapter);
 
-        String[] priorities = {"גבוהה", "בינונית", "נמוכה"};
-        spPriority.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, priorities));
+        String[] priorities = {"עדיפות", "נמוכה", "בינונית", "גבוהה", "דחופה"};
+        ArrayAdapter<String> prioAdapter = new ArrayAdapter<>(this,
+            android.R.layout.simple_spinner_item, priorities);
+        prioAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spPriority.setAdapter(prioAdapter);
 
-        btnCamera.setOnClickListener(v -> openCamera());
-        btnGallery.setOnClickListener(v -> openGallery());
+        btnCamera.setOnClickListener(v -> {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+                    == PackageManager.PERMISSION_GRANTED) {
+                openCamera();
+            } else {
+                permissionLauncher.launch(Manifest.permission.CAMERA);
+            }
+        });
+
+        btnGallery.setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_PICK,
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            intent.setType("image/*");
+            galleryLauncher.launch(intent);
+        });
+
         btnSubmit.setOnClickListener(v -> submitTicket());
-
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setTitle("קריאת שירות חדשה");
-        }
     }
 
     private void openCamera() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[]{Manifest.permission.CAMERA}, 100);
-            return;
-        }
         try {
-            File photoFile = createImageFile();
-            photoUri = FileProvider.getUriForFile(this, getPackageName() + ".provider", photoFile);
+            photoFile = createImageFile();
+            cameraImageUri = FileProvider.getUriForFile(this,
+                getPackageName() + ".fileprovider", photoFile);
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, cameraImageUri);
             cameraLauncher.launch(intent);
-        } catch (IOException e) { e.printStackTrace(); }
-    }
-
-    private void openGallery() {
-        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        galleryLauncher.launch(intent);
+        } catch (IOException e) {
+            Toast.makeText(this, "שגיאה בפתיחת מצלמה", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private File createImageFile() throws IOException {
-        String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+        String imageFileName = "IMG_" + timeStamp + "_";
         File storageDir = getExternalFilesDir(null);
-        return File.createTempFile("IMG_" + timestamp, ".jpg", storageDir);
+        return File.createTempFile(imageFileName, ".jpg", storageDir);
     }
 
     private void submitTicket() {
         String name = etName.getText().toString().trim();
-        String phone = etPhone.getText().toString().trim();
         String title = etTitle.getText().toString().trim();
         String desc = etDesc.getText().toString().trim();
 
         if (name.isEmpty() || title.isEmpty() || desc.isEmpty()) {
-            Toast.makeText(this, "אנא מלא את כל השדות החובה", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "אנא מלא את כל השדות המסומנים *", Toast.LENGTH_SHORT).show();
             return;
         }
-
-        Ticket ticket = new Ticket();
-        ticket.setReporterName(name);
-        ticket.setReporterPhone(phone);
-        ticket.setCompany(etCompany.getText().toString().trim());
-        ticket.setTitle(title);
-        ticket.setDescription(desc);
-        ticket.setCategory(spCategory.getSelectedItem().toString());
-        ticket.setPriority(spPriority.getSelectedItemPosition());
 
         btnSubmit.setEnabled(false);
         progressBar.setVisibility(View.VISIBLE);
 
-        final NewTicketActivity self = this;
-        EmailSender.send(ticket, selectedBitmap, new EmailSender.Callback() {
-            @Override
-            public void onSuccess() {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
+        Ticket ticket = new Ticket(
+            (int)(System.currentTimeMillis() % 100000),
+            name,
+            etPhone.getText().toString().trim(),
+            etCompany.getText().toString().trim(),
+            title,
+            desc,
+            spCategory.getSelectedItem().toString(),
+            spPriority.getSelectedItem().toString()
+        );
+
+        new EmailSender().sendEmail(ticket, cameraImageUri != null ? cameraImageUri.toString() : null,
+            new EmailSender.Callback() {
+                @Override
+                public void onSuccess() {
+                    runOnUiThread(() -> {
                         progressBar.setVisibility(View.GONE);
-                        btnSubmit.setEnabled(true);
-                        Intent intent = new Intent(self, SuccessActivity.class);
-                        intent.putExtra("ticketId", ticket.getId());
-                        startActivity(intent);
+                        playSuccessSound();
+                        startActivity(new Intent(NewTicketActivity.this, SuccessActivity.class));
                         finish();
-                    }
-                });
-            }
-            @Override
-            public void onFailure(Exception e) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
+                    });
+                }
+                @Override
+                public void onFailure(Exception e) {
+                    runOnUiThread(() -> {
                         progressBar.setVisibility(View.GONE);
                         btnSubmit.setEnabled(true);
-                        Toast.makeText(self, "שגיאה בשליחה: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                    }
-                });
-            }
-        });
+                        Toast.makeText(NewTicketActivity.this,
+                            "שגיאה בשליחה: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    });
+                }
+            });
     }
 
-    @Override
-    public boolean onSupportNavigateUp() { finish(); return true; }
+    private void playSuccessSound() {
+        try {
+            ToneGenerator toneGen = new ToneGenerator(AudioManager.STREAM_NOTIFICATION, 100);
+            toneGen.startTone(ToneGenerator.TONE_PROP_BEEP2, 400);
+            android.os.Handler handler = new android.os.Handler();
+            handler.postDelayed(() -> {
+                toneGen.startTone(ToneGenerator.TONE_PROP_BEEP, 300);
+            }, 450);
+            handler.postDelayed(toneGen::release, 800);
+        } catch (Exception e) {
+            // ignore if sound fails
+        }
+    }
 }
