@@ -14,7 +14,7 @@
             android:id="@+id/etName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="שם מלא *"
+            android:hint="* שם מלא"
             android:textColorHint="#888"
             android:textColor="#FFFFFF"
             android:backgroundTint="@color/teal"
@@ -43,114 +43,129 @@
             android:textColor="#FFFFFF"
             android:backgroundTint="@color/teal"
             android:layout_marginBottom="12dp"
+            android:inputType="textCapWords"
             android:layoutDirection="rtl"/>
 
         <EditText
-            android:id="@+id/etTitle"
+            android:id="@+id/etSubject"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="נושא הקריאה *"
+            android:hint="* נושא הקריאה"
             android:textColorHint="#888"
             android:textColor="#FFFFFF"
             android:backgroundTint="@color/teal"
             android:layout_marginBottom="12dp"
+            android:inputType="textCapSentences"
             android:layoutDirection="rtl"/>
 
         <EditText
-            android:id="@+id/etDesc"
+            android:id="@+id/etDescription"
             android:layout_width="match_parent"
-            android:layout_height="120dp"
-            android:hint="תיאור התקלה *"
+            android:layout_height="wrap_content"
+            android:hint="* תיאור התקלה"
             android:textColorHint="#888"
             android:textColor="#FFFFFF"
             android:backgroundTint="@color/teal"
             android:layout_marginBottom="12dp"
-            android:gravity="top|right"
             android:inputType="textMultiLine"
+            android:minLines="3"
             android:layoutDirection="rtl"/>
 
-        <Spinner
-            android:id="@+id/spCategory"
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
-            android:backgroundTint="@color/teal"
+            android:text="עדיפות"
             android:textColor="#FFFFFF"
-            android:popupBackground="@color/card_bg"/>
+            android:textSize="14sp"
+            android:layout_marginBottom="4dp"
+            android:layoutDirection="rtl"/>
 
         <Spinner
             android:id="@+id/spPriority"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
             android:backgroundTint="@color/teal"
             android:textColor="#FFFFFF"
-            android:popupBackground="@color/card_bg"/>
+            android:layout_marginBottom="12dp"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="צרף צילום מסך (אופציונלי):"
-            android:textColor="#CCCCCC"
+            android:text="סוג שירות"
+            android:textColor="#FFFFFF"
             android:textSize="14sp"
-            android:gravity="right"
-            android:layout_marginBottom="8dp"/>
+            android:layout_marginBottom="4dp"
+            android:layoutDirection="rtl"/>
+
+        <Spinner
+            android:id="@+id/spServiceType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/teal"
+            android:textColor="#FFFFFF"
+            android:layout_marginBottom="16dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="📎 צרף תמונה (אופציונלי)"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp"
+            android:layoutDirection="rtl"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginBottom="12dp">
+            android:layout_marginBottom="16dp">
 
             <Button
                 android:id="@+id/btnCamera"
                 android:layout_width="0dp"
-                android:layout_height="48dp"
+                android:layout_height="56dp"
                 android:layout_weight="1"
                 android:text="📷 צלם תמונה"
-                android:background="@color/card_bg"
-                android:textColor="@color/teal"
-                android:textSize="14sp"
+                android:textColor="#000000"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif-medium"
+                android:backgroundTint="@color/teal"
                 android:layout_marginEnd="8dp"/>
 
             <Button
                 android:id="@+id/btnGallery"
                 android:layout_width="0dp"
-                android:layout_height="48dp"
+                android:layout_height="56dp"
                 android:layout_weight="1"
                 android:text="🖼 בחר מגלריה"
-                android:background="@color/card_bg"
-                android:textColor="@color/teal"
-                android:textSize="14sp"/>
+                android:textColor="#000000"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif-medium"
+                android:backgroundTint="@color/teal"/>
 
         </LinearLayout>
 
         <ImageView
-            android:id="@+id/ivScreenshot"
+            android:id="@+id/ivPreview"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:visibility="gone"
+            android:layout_height="160dp"
             android:scaleType="centerCrop"
-            android:layout_marginBottom="16dp"/>
-
-        <ProgressBar
-            android:id="@+id/progressBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
             android:visibility="gone"
-            android:indeterminateTint="@color/teal"
-            android:layout_marginBottom="8dp"/>
+            android:layout_marginBottom="16dp"/>
 
         <Button
             android:id="@+id/btnSubmit"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
+            android:layout_height="64dp"
             android:text="שלח קריאת שירות"
-            android:background="@drawable/btn_primary"
-            android:textColor="#0D1B2A"
-            android:textSize="16sp"
+            android:textColor="#000000"
+            android:textSize="18sp"
             android:textStyle="bold"
+            android:fontFamily="sans-serif-medium"
+            android:backgroundTint="@color/teal"
             android:layout_marginBottom="24dp"/>
 
     </LinearLayout>
