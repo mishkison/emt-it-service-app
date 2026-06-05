@@ -3,7 +3,6 @@ package com.emtit.service;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.media.ToneGenerator;
 import android.media.AudioManager;
 import android.net.Uri;
@@ -151,45 +150,44 @@ public class NewTicketActivity extends AppCompatActivity {
         btnSubmit.setEnabled(false);
         progressBar.setVisibility(View.VISIBLE);
 
-        Ticket ticket = new Ticket(
-            (int)(System.currentTimeMillis() % 100000),
-            name,
-            etPhone.getText().toString().trim(),
-            etCompany.getText().toString().trim(),
-            title,
-            desc,
-            spCategory.getSelectedItem().toString(),
-            spPriority.getSelectedItem().toString()
-        );
+        Ticket ticket = new Ticket();
+        ticket.setReporterName(name);
+        ticket.setReporterPhone(etPhone.getText().toString().trim());
+        ticket.setCompany(etCompany.getText().toString().trim());
+        ticket.setTitle(title);
+        ticket.setDescription(desc);
+        ticket.setCategory(spCategory.getSelectedItem().toString());
+        ticket.setPriority(spPriority.getSelectedItem().toString());
 
-        new EmailSender().sendEmail(ticket, cameraImageUri != null ? cameraImageUri.toString() : null,
-            new EmailSender.Callback() {
-                @Override
-                public void onSuccess() {
-                    runOnUiThread(() -> {
-                        progressBar.setVisibility(View.GONE);
-                        playSuccessSound();
-                        startActivity(new Intent(NewTicketActivity.this, SuccessActivity.class));
-                        finish();
-                    });
-                }
-                @Override
-                public void onFailure(Exception e) {
-                    runOnUiThread(() -> {
-                        progressBar.setVisibility(View.GONE);
-                        btnSubmit.setEnabled(true);
-                        Toast.makeText(NewTicketActivity.this,
-                            "שגיאה בשליחה: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                    });
-                }
-            });
+        String imageUriStr = cameraImageUri != null ? cameraImageUri.toString() : null;
+
+        new EmailSender().sendEmail(ticket, imageUriStr, new EmailSender.Callback() {
+            @Override
+            public void onSuccess() {
+                runOnUiThread(() -> {
+                    progressBar.setVisibility(View.GONE);
+                    playSuccessSound();
+                    startActivity(new Intent(NewTicketActivity.this, SuccessActivity.class));
+                    finish();
+                });
+            }
+            @Override
+            public void onFailure(Exception e) {
+                runOnUiThread(() -> {
+                    progressBar.setVisibility(View.GONE);
+                    btnSubmit.setEnabled(true);
+                    Toast.makeText(NewTicketActivity.this,
+                        "שגיאה בשליחה: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                });
+            }
+        });
     }
 
     private void playSuccessSound() {
         try {
             ToneGenerator toneGen = new ToneGenerator(AudioManager.STREAM_NOTIFICATION, 100);
             toneGen.startTone(ToneGenerator.TONE_PROP_BEEP2, 400);
-            android.os.Handler handler = new android.os.Handler();
+            android.os.Handler handler = new android.os.Handler(getMainLooper());
             handler.postDelayed(() -> {
                 toneGen.startTone(ToneGenerator.TONE_PROP_BEEP, 300);
             }, 450);
