@@ -141,19 +141,33 @@ public class NewTicketActivity extends AppCompatActivity {
         btnSubmit.setEnabled(false);
         progressBar.setVisibility(View.VISIBLE);
 
-        EmailSender.send(ticket, selectedBitmap, error -> {
-            runOnUiThread(() -> {
-                progressBar.setVisibility(View.GONE);
-                btnSubmit.setEnabled(true);
-                if (error == null) {
-                    Intent intent = new Intent(NewTicketActivity.this, SuccessActivity.class);
-                    intent.putExtra("ticketId", ticket.getId());
-                    startActivity(intent);
-                    finish();
-                } else {
-                    Toast.makeText(this, "שגיאה בשליחה: " + error.getMessage(), Toast.LENGTH_LONG).show();
-                }
-            });
+        final NewTicketActivity self = this;
+        EmailSender.send(ticket, selectedBitmap, new EmailSender.Callback() {
+            @Override
+            public void onSuccess() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        progressBar.setVisibility(View.GONE);
+                        btnSubmit.setEnabled(true);
+                        Intent intent = new Intent(self, SuccessActivity.class);
+                        intent.putExtra("ticketId", ticket.getId());
+                        startActivity(intent);
+                        finish();
+                    }
+                });
+            }
+            @Override
+            public void onFailure(Exception e) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        progressBar.setVisibility(View.GONE);
+                        btnSubmit.setEnabled(true);
+                        Toast.makeText(self, "שגיאה בשליחה: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
         });
     }
 
