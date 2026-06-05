@@ -7,4 +7,9 @@
     <color name="emt_white_70">#B3FFFFFF</color>
     <color name="emt_white_40">#66FFFFFF</color>
     <color name="status_bar">#0A1520</color>
+    <!-- Aliases for layout compatibility -->
+    <color name="bg_dark">#0D1B2A</color>
+    <color name="card_bg">#1A2D40</color>
+    <color name="teal">#00C9A7</color>
+    <color name="teal_dark">#00A688</color>
 </resources>
